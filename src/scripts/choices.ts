@@ -1014,7 +1014,7 @@ class Choices {
     this._triggerChange(placeholderChoice.value);
   }
 
-  _handleButtonAction(activeItems?: Item[], element?: HTMLElement): void {
+  _handleButtonAction(activeItems?: Item[], element?: HTMLElement | SVGElement): void {
     if (
       !activeItems ||
       !element ||
@@ -1025,7 +1025,7 @@ class Choices {
     }
 
     const itemId =
-      element.parentNode && (element.parentNode as HTMLElement).dataset.id;
+      element.parentNode && (element.parentNode as HTMLElement | SVGElement).dataset.id;
     const itemToRemove =
       itemId && activeItems.find(item => item.id === parseInt(itemId, 10));
 
@@ -1044,7 +1044,7 @@ class Choices {
 
   _handleItemAction(
     activeItems?: Item[],
-    element?: HTMLElement,
+    element?: HTMLElement | SVGElement,
     hasShiftKey = false,
   ): void {
     if (
@@ -1074,14 +1074,15 @@ class Choices {
     this.input.focus();
   }
 
-  _handleChoiceAction(activeItems?: Item[], element?: HTMLElement): void {
+  _handleChoiceAction(activeItems?: Item[], element?: HTMLElement | SVGElement): void {
     if (!activeItems || !element) {
       return;
     }
 
     // If we are clicking on an option
     const { id } = element.dataset;
-    const choice = id && this._store.getChoiceById(id);
+    const choice = typeof id !== 'undefined' && this._store.getChoiceById(id);
+
     if (!choice) {
       return;
     }
@@ -1678,7 +1679,7 @@ class Choices {
    */
   _onMouseDown(event: MouseEvent): void {
     const { target } = event;
-    if (!(target instanceof HTMLElement)) {
+    if (!(target instanceof HTMLElement || target instanceof SVGElement)) {
       return;
     }
 
@@ -1695,7 +1696,7 @@ class Choices {
       this._isScrollingOnIe = isOnScrollbar;
     }
 
-    if (target === this.input.element) {
+    if ((target as HTMLElement) === this.input.element) {
       return;
     }
 
@@ -1722,7 +1723,10 @@ class Choices {
    * @param {MouseEvent} event
    */
   _onMouseOver({ target }: Pick<MouseEvent, 'target'>): void {
-    if (target instanceof HTMLElement && 'choice' in target.dataset) {
+    if (
+      (target instanceof HTMLElement || target instanceof SVGElement) &&
+      'choice' in target.dataset
+    ) {
       this._highlightChoice(target);
     }
   }
@@ -1845,8 +1849,8 @@ class Choices {
     this._store.dispatch(resetTo(this._initialState));
   }
 
-  _highlightChoice(el: HTMLElement | null = null): void {
-    const choices: HTMLElement[] = Array.from(
+  _highlightChoice(el: HTMLElement | SVGElement | null = null): void {
+    const choices: (HTMLElement | SVGElement)[] = Array.from(
       this.dropdown.element.querySelectorAll('[data-choice-selectable]'),
     );
 
@@ -2257,8 +2261,6 @@ class Choices {
 
           const isSelected = shouldPreselect ? true : choice.selected;
           const isDisabled = choice.disabled;
-
-          console.log(isDisabled, choice);
 
           this._addChoice({
             value,
