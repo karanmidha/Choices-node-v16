@@ -1,4 +1,4 @@
-/*! choices.js v9.0.1 | © 2019 Josh Johnson | https://github.com/jshjohnson/Choices#readme */
+/*! choices.js v9.0.2 | © 2020 Josh Johnson | https://github.com/jshjohnson/Choices#readme */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -2367,7 +2367,7 @@ function () {
 
     var id = element.dataset.id;
 
-    var choice = id && this._store.getChoiceById(id);
+    var choice = typeof id !== 'undefined' && this._store.getChoiceById(id);
 
     if (!choice) {
       return;
@@ -2898,7 +2898,7 @@ function () {
   Choices.prototype._onMouseDown = function (event) {
     var target = event.target;
 
-    if (!(target instanceof HTMLElement)) {
+    if (!(target instanceof HTMLElement || target instanceof SVGElement)) {
       return;
     } // If we have our mouse down on the scrollbar and are on IE11...
 
@@ -2941,7 +2941,7 @@ function () {
   Choices.prototype._onMouseOver = function (_a) {
     var target = _a.target;
 
-    if (target instanceof HTMLElement && 'choice' in target.dataset) {
+    if ((target instanceof HTMLElement || target instanceof SVGElement) && 'choice' in target.dataset) {
       this._highlightChoice(target);
     }
   };
@@ -3459,7 +3459,6 @@ function () {
           var shouldPreselect = _this._isSelectOneElement && !hasSelectedChoice && index === firstEnabledChoiceIndex;
           var isSelected = shouldPreselect ? true : choice.selected;
           var isDisabled = choice.disabled;
-          console.log(isDisabled, choice);
 
           _this._addChoice({
             value: value,
@@ -3577,7 +3576,7 @@ function () {
   };
 
   Choices.prototype._generatePlaceholderValue = function () {
-    if (this._isSelectElement) {
+    if (this._isSelectElement && this.passedElement.placeholderOption) {
       var placeholderOption = this.passedElement.placeholderOption;
       return placeholderOption ? placeholderOption.text : null;
     }
