@@ -1014,7 +1014,10 @@ class Choices {
     this._triggerChange(placeholderChoice.value);
   }
 
-  _handleButtonAction(activeItems?: Item[], element?: HTMLElement | SVGElement): void {
+  _handleButtonAction(
+    activeItems?: Item[],
+    element?: HTMLElement | SVGElement,
+  ): void {
     if (
       !activeItems ||
       !element ||
@@ -1025,7 +1028,8 @@ class Choices {
     }
 
     const itemId =
-      element.parentNode && (element.parentNode as HTMLElement | SVGElement).dataset.id;
+      element.parentNode &&
+      (element.parentNode as HTMLElement | SVGElement).dataset.id;
     const itemToRemove =
       itemId && activeItems.find(item => item.id === parseInt(itemId, 10));
 
@@ -1074,7 +1078,10 @@ class Choices {
     this.input.focus();
   }
 
-  _handleChoiceAction(activeItems?: Item[], element?: HTMLElement | SVGElement): void {
+  _handleChoiceAction(
+    activeItems?: Item[],
+    element?: HTMLElement | SVGElement,
+  ): void {
     if (!activeItems || !element) {
       return;
     }

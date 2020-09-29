@@ -7,7 +7,7 @@
   "scripts": {
     "start": "run-p js:watch css:watch",
     "build": "run-p js:build css:build",
-    "lint": "eslint src/scripts/**/*.ts",
+    "lint": "eslint src/scripts --ext .ts",
     "bundlesize": "bundlesize",
     "cypress:run": "cypress run",
     "cypress:open": "cypress open",
