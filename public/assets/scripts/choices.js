@@ -1,4 +1,4 @@
-/*! choices.js v9.0.2 | © 2020 Josh Johnson | https://github.com/jshjohnson/Choices#readme */
+/*! choices.js v9.0.3 | © 2020 Josh Johnson | https://github.com/jshjohnson/Choices#readme */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -2941,8 +2941,12 @@ function () {
   Choices.prototype._onMouseOver = function (_a) {
     var target = _a.target;
 
-    if ((target instanceof HTMLElement || target instanceof SVGElement) && 'choice' in target.dataset) {
-      this._highlightChoice(target);
+    if (target instanceof HTMLElement || target instanceof SVGElement) {
+      var choiceElement = target && target.closest('[data-choice]');
+
+      if (choiceElement) {
+        this._highlightChoice(choiceElement);
+      }
     }
   };
 
