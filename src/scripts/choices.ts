@@ -1722,12 +1722,14 @@ class Choices {
    * Handles mouseover event over this.dropdown
    * @param {MouseEvent} event
    */
-  _onMouseOver({ target }: Pick<MouseEvent, 'target'>): void {
-    if (
-      (target instanceof HTMLElement || target instanceof SVGElement) &&
-      'choice' in target.dataset
-    ) {
-      this._highlightChoice(target);
+  _onMouseOver({ target }: MouseEvent): void {
+    if (target instanceof HTMLElement || target instanceof SVGElement) {
+      const choiceElement: HTMLElement | SVGElement | null =
+        target && target.closest('[data-choice]');
+
+      if (choiceElement) {
+        this._highlightChoice(choiceElement);
+      }
     }
   }
 
